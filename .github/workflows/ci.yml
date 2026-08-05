@@ -1,25 +1,44 @@
 name: CI
 
+env:
+  DEBUG: napi:*
+  APP_NAME: ogg
+  MACOSX_DEPLOYMENT_TARGET: '10.13'
+  CARGO_INCREMENTAL: '1'
+
+permissions:
+  contents: read
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    tags-ignore:
+      - '**'
+    paths-ignore:
+      - '**/*.md'
+      - LICENSE
+      - '**/.gitignore'
+      - .editorconfig
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
-# Cancel superseded runs on the same ref.
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # ─── Rust: format, lint, test the pure core ──────────────────────────
-  rust:
-    name: Rust (fmt · clippy · test)
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Lint & format — Biome (JS/TS) + Rust fmt/clippy. Fails fast on style.
+  # ═══════════════════════════════════════════════════════════════════════════
+  lint:
+    name: Lint (Biome · rustfmt · clippy)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust toolchain
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -27,29 +46,7 @@ jobs:
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
-      - name: Format check
-        run: cargo fmt --all --check
-
-      - name: Clippy (deny warnings)
-        run: cargo clippy --workspace --exclude ogg-node -- -D warnings
-
-      - name: Test
-        run: cargo test --workspace --exclude ogg-node
-
-  # ─── JS/TS: lint, build, unit + integration tests ────────────────────
-  node:
-    name: Node (biome · build · test)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache cargo
-        uses: Swatinem/rust-cache@v2
-
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -58,10 +55,58 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint (Biome)
+      - name: Biome check (lint + format)
         run: npm run lint
 
-      - name: Build (native + TS)
+      - name: rustfmt
+        run: cargo fmt --all --check
+
+      - name: clippy
+        run: cargo clippy --workspace --exclude ogg-node -- -D warnings
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Rust unit tests
+  # ═══════════════════════════════════════════════════════════════════════════
+  rust-test:
+    name: Rust tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run tests (excluding NAPI bindings)
+        run: cargo test --workspace --exclude ogg-node --verbose
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # TypeScript: build the native addon + run unit and integration tests
+  # ═══════════════════════════════════════════════════════════════════════════
+  node-test:
+    name: Node tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (native + TypeScript)
         run: npm run build:debug
 
       - name: Unit tests
@@ -69,3 +114,24 @@ jobs:
 
       - name: Integration tests
         run: npm run test:integration
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Security audit — fail on known-vulnerable dependencies
+  # ═══════════════════════════════════════════════════════════════════════════
+  audit:
+    name: cargo-audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-audit
+        run: cargo install --locked cargo-audit || true
+
+      - name: Audit dependencies
+        run: cargo audit --deny warnings

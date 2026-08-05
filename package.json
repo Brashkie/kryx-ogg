@@ -47,7 +47,8 @@
     "coverage:open": "node -e \"require('child_process').exec(process.platform==='win32'?'start coverage/index.html':process.platform==='darwin'?'open coverage/index.html':'xdg-open coverage/index.html')\"",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "format:check": "biome format ."
+    "format:check": "biome format .",
+    "artifacts": "napi artifacts"
   },
   "keywords": ["ogg", "container", "multimedia", "opus", "vorbis", "audio", "kryx"],
   "license": "Apache-2.0",
