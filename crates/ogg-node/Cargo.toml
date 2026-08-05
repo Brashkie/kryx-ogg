@@ -1,0 +1,21 @@
+[package]
+name = "ogg-node"
+description = "napi bridge exposing ogg-core to Node.js — the native addon behind @kryxjs/ogg."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+ogg-core = { path = "../ogg-core" }
+# napi v2, pinned — same policy as codecs-opus.
+napi = { version = "2", default-features = false, features = ["napi8"] }
+napi-derive = "2"
+
+[build-dependencies]
+napi-build = "2"

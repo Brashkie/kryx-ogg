@@ -1,0 +1,33 @@
+# What NOT to publish to npm. The published package is the built JS (dist/),
+# the napi loader, the platform binary, and the docs — nothing else.
+# (package.json "files" also whitelists; this is the belt-and-suspenders view.)
+
+# ─── Rust sources & build (the .node binary ships; the sources don't) ───
+/crates
+/target
+Cargo.toml
+Cargo.lock
+build.rs
+*.rs
+
+# ─── TypeScript sources & build config (only dist/ ships) ───────────────
+/src
+/__tests__
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+vitest.integration.config.ts
+biome.json
+
+# ─── CI / tooling / repo meta ───────────────────────────────────────────
+/.github
+/scripts
+/coverage
+.gitignore
+.editorconfig
+
+# ─── Editor / OS ────────────────────────────────────────────────────────
+.DS_Store
+*.log
+.idea/
+.vscode/

@@ -1,0 +1,99 @@
+{
+  "name": "@kryxjs/ogg",
+  "version": "0.1.0",
+  "description": "A small, dependency-free reader for the Ogg container format. Part of the Kryx multimedia ecosystem.",
+  "type": "commonjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.mts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.es.md",
+    "CHANGELOG.md",
+    "ROADMAP.md",
+    "LICENSE"
+  ],
+  "napi": {
+    "name": "ogg",
+    "triples": {
+      "defaults": true,
+      "additional": [
+        "aarch64-apple-darwin",
+        "aarch64-pc-windows-msvc",
+        "aarch64-unknown-linux-gnu",
+        "x86_64-unknown-linux-musl"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "npm run build:native && npm run build:ts",
+    "build:native": "napi build --platform --release --cargo-cwd crates/ogg-node --js index.js --dts index.d.ts",
+    "build:native:debug": "napi build --platform --cargo-cwd crates/ogg-node --js index.js --dts index.d.ts",
+    "build:debug": "npm run build:native:debug && npm run build:ts",
+    "build:ts": "tsup && node scripts/fix-dts.js",
+    "test": "npm run test:rust && npm run test:unit",
+    "test:rust": "cross-env CARGO_INCREMENTAL=0 cargo test --workspace --exclude ogg-node",
+    "test:watch": "cross-env VITE_CJS_IGNORE_WARNING=true vitest",
+    "lint": "biome check .",
+    "version": "napi version",
+    "test:unit": "cross-env VITE_CJS_IGNORE_WARNING=true vitest run",
+    "test:integration": "cross-env VITE_CJS_IGNORE_WARNING=true vitest run --config vitest.integration.config.ts",
+    "test:coverage": "cross-env VITE_CJS_IGNORE_WARNING=true vitest run --coverage",
+    "coverage:open": "node -e \"require('child_process').exec(process.platform==='win32'?'start coverage/index.html':process.platform==='darwin'?'open coverage/index.html':'xdg-open coverage/index.html')\"",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
+  },
+  "keywords": [
+    "ogg",
+    "container",
+    "multimedia",
+    "opus",
+    "vorbis",
+    "audio",
+    "kryx"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brashkie/kryx-ogg.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@napi-rs/cli": "^2.18.0",
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "cross-env": "^7.0.3",
+    "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^6.0.3",
+    "vitest": "^1.2.0"
+  },
+  "optionalDependencies": {
+    "@kryxjs/ogg-win32-x64-msvc": "0.1.0",
+    "@kryxjs/ogg-win32-arm64-msvc": "0.1.0",
+    "@kryxjs/ogg-darwin-x64": "0.1.0",
+    "@kryxjs/ogg-darwin-arm64": "0.1.0",
+    "@kryxjs/ogg-linux-x64-gnu": "0.1.0",
+    "@kryxjs/ogg-linux-x64-musl": "0.1.0",
+    "@kryxjs/ogg-linux-arm64-gnu": "0.1.0"
+  }
+}
