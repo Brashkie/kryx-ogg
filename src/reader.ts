@@ -65,7 +65,9 @@ export class OggReader {
    *   `Uint8Array` (the latter is wrapped without copying).
    */
   constructor(data: Buffer | Uint8Array) {
-    this.#bytes = Buffer.isBuffer(data) ? data : Buffer.from(data.buffer, data.byteOffset, data.byteLength)
+    this.#bytes = Buffer.isBuffer(data)
+      ? data
+      : Buffer.from(data.buffer, data.byteOffset, data.byteLength)
   }
 
   /** Parse once (lazily), grouping packets by logical stream serial. */
