@@ -13,7 +13,7 @@
  * coverage run (they exercise the boundary, not SDK-logic coverage).
  */
 
-import { describe, expect, it } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { OggReader, OggWriter, coreVersion } from '../../src/index'
 
 // Ogg CRC-32: poly 0x04C11DB7, init 0, no reflection, no final xor.
@@ -28,12 +28,7 @@ function oggCrc(data: Uint8Array): number {
   return crc >>> 0
 }
 
-function makePage(
-  serial: number,
-  headerType: number,
-  segs: number[],
-  body: Uint8Array,
-): Uint8Array {
+function makePage(serial: number, headerType: number, segs: number[], body: Uint8Array): Uint8Array {
   const page: number[] = []
   for (const c of 'OggS') page.push(c.charCodeAt(0))
   page.push(0, headerType)

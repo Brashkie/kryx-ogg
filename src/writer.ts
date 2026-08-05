@@ -60,8 +60,7 @@ export class OggWriter {
       : Buffer.from(data.buffer, data.byteOffset, data.byteLength)
     this.#packets.push({
       data: buf,
-      granulePosition:
-        typeof granulePosition === 'bigint' ? granulePosition : BigInt(granulePosition),
+      granulePosition: typeof granulePosition === 'bigint' ? granulePosition : BigInt(granulePosition),
     })
     return this
   }

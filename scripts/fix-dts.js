@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict'
 /**
  * Post-build script that duplicates `dist/index.d.ts` into `dist/index.d.cts`
  * and `dist/index.d.mts`.

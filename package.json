@@ -17,7 +17,14 @@
       "default": "./dist/index.cjs"
     }
   },
-  "files": ["dist", "README.md", "README.es.md", "CHANGELOG.md", "ROADMAP.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "README.es.md",
+    "CHANGELOG.md",
+    "ROADMAP.md",
+    "LICENSE"
+  ],
   "napi": {
     "name": "ogg",
     "triples": {
@@ -50,7 +57,15 @@
     "format:check": "biome format .",
     "artifacts": "napi artifacts"
   },
-  "keywords": ["ogg", "container", "multimedia", "opus", "vorbis", "audio", "kryx"],
+  "keywords": [
+    "ogg",
+    "container",
+    "multimedia",
+    "opus",
+    "vorbis",
+    "audio",
+    "kryx"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

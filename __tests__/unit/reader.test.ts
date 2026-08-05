@@ -10,7 +10,7 @@
  * imports as `../index.js`. Both resolve to the same module.
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 // Mock state, created in the hoisted scope so the vi.mock factory (which vitest
 // hoists above imports) can safely reference it. Programmable per test.

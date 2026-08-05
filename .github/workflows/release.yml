@@ -193,12 +193,7 @@ jobs:
       - name: Move artifacts into place
         run: |
           find artifacts -name '*.node' -exec cp {} . \;
-          npx napi create-npm-dirs
-          npm run artifacts
-
-      - name: List npm dir
-        run: ls -R ./npm || echo "no npm dir"
-        shell: bash
+          ls -la *.node
 
       - name: Setup npm auth
         run: |
@@ -213,16 +208,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish platform sub-packages
-        run: |
-          for dir in npm/*/; do
-            echo "Publishing $dir"
-            cd "$dir"
-            npm publish --access public --no-git-checks || echo "Failed or already published: $dir"
-            cd "$GITHUB_WORKSPACE"
-          done
+      - name: Prepublish platform sub-packages (napi)
+        run: npx napi prepublish -t npm --skip-gh-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish main package
         run: npm publish --access public --no-git-checks
