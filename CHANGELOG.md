@@ -4,6 +4,15 @@ All notable changes to `@kryxjs/ogg` are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and this project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.2] — 2026-08-05
+
+### Fixed
+
+- The napi loader (`index.js`) and its types (`index.d.ts`) are now included in
+  the published package. They were missing from the `files` whitelist, so
+  `dist/index.mjs` (which imports `../index.js`) failed with
+  `ERR_MODULE_NOT_FOUND` after a clean `npm install`. No code changes.
+
 ## [0.1.1] — 2026-08-05
 
 ### Fixed
@@ -43,5 +52,6 @@ JavaScript, with zero runtime dependencies.
 - The public API is a "streaming API over an eager engine": the internals can
   become truly incremental later without any user-facing change.
 
+[0.1.2]: https://github.com/Brashkie/kryx-ogg/releases/tag/v0.1.2
 [0.1.1]: https://github.com/Brashkie/kryx-ogg/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Brashkie/kryx-ogg/releases/tag/v0.1.0

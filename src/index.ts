@@ -23,14 +23,14 @@
  * }
  * ```
  *
- * ## Status (0.1.1 — M2)
+ * ## Status (0.1.2 — M2)
  *
  * - ✅ M1: Ogg core in Rust — pages, CRC-32 validation, packet reassembly,
  *   logical streams (zero dependencies).
  * - ✅ M2: napi bridge + this TypeScript SDK (`OggReader` / `OggStream`).
  * - ✅ M3: writing (`OggWriter`) — read AND write Ogg from JavaScript.
  * - ⏸ M4: Opus integration (`OpusStream` in `@kryxjs/codecs-opus`).
- * - ⏸ M5: stable 0.1.1.
+ * - ⏸ M5: stable 0.1.2.
  */
 
 export { OggReader, OggStream } from './reader'
@@ -39,7 +39,7 @@ export type { OggPacket } from './types'
 import { native } from './native'
 
 /** The package version. */
-export const VERSION = '0.1.1' as const
+export const VERSION = '0.1.2' as const
 
 /** The version of the native `ogg-core` the loaded addon was built against. */
 export function coreVersion(): string {

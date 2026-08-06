@@ -117,11 +117,11 @@ dependencies = [
 
 [[package]]
 name = "ogg-core"
-version = "0.1.1"
+version = "0.1.2"
 
 [[package]]
 name = "ogg-node"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "napi",
  "napi-build",
