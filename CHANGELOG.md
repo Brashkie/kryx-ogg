@@ -4,6 +4,15 @@ All notable changes to `@kryxjs/ogg` are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and this project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] — 2026-08-05
+
+### Fixed
+
+- Release pipeline: platform sub-packages (`@kryxjs/ogg-*`) are now published
+  correctly. The `preartifacts` step generates each `npm/<platform>/` package
+  before `napi artifacts` copies the binary into it, so `npm install` resolves
+  the right prebuilt `.node` on every supported platform. No code changes.
+
 ## [0.1.0] — 2026-08-05
 
 First stable release. Reads and writes the Ogg container format from Rust and
@@ -34,4 +43,5 @@ JavaScript, with zero runtime dependencies.
 - The public API is a "streaming API over an eager engine": the internals can
   become truly incremental later without any user-facing change.
 
+[0.1.1]: https://github.com/Brashkie/kryx-ogg/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Brashkie/kryx-ogg/releases/tag/v0.1.0

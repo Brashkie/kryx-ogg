@@ -58,7 +58,7 @@ beforeEach(() => {
 
 describe('VERSION', () => {
   it('is the stable version', () => {
-    expect(VERSION).toBe('0.1.0')
+    expect(VERSION).toBe('0.1.1')
   })
 })
 
